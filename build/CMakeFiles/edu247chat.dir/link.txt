@@ -1,0 +1,1 @@
+/usr/bin/gcc -Wall -Wextra -O2 -g -Wl,--dependency-file=CMakeFiles/edu247chat.dir/link.d CMakeFiles/edu247chat.dir/src/chat_server.c.o CMakeFiles/edu247chat.dir/src/client.c.o CMakeFiles/edu247chat.dir/src/epoll_loop.c.o CMakeFiles/edu247chat.dir/src/go_bridge.c.o CMakeFiles/edu247chat.dir/src/main.c.o CMakeFiles/edu247chat.dir/src/protocol.c.o -o edu247chat

@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.ipynb
+notebooks/
+models/
+checkpoints/
+cache/
+tmp/
+dist/
+build/
+*.whl
+*.tar.gz

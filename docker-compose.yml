@@ -1,0 +1,74 @@
+
+services:
+  c-chat:
+    image: edu247chat:latest
+    build:
+      context: ./edu247chat
+    container_name: edu247chat
+    ports:
+      - "9000:9000"
+    depends_on:
+      - go-bridge
+    networks:
+      - edu247net
+
+  go-bridge:
+    image: edu247api:latest
+    build:
+      context: ./edugo
+    container_name: edugo-bridge
+    ports:
+      - "9100:9100"
+    depends_on:
+      - python-ai
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: edu247
+      DB_PASS: edu247pass
+      DB_NAME: edu247db
+    volumes:
+      - ./edugo/migrations:/app/migrations
+    networks:
+      - edu247net
+
+  python-ai:
+    image: edu247model:latest
+    build:
+      context: ./edu247model
+    container_name: edu247-ai
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: edu247
+      DB_PASS: edu247pass
+      DB_NAME: edu247db
+    networks:
+      - edu247net
+
+  postgres:
+    image: postgres:15
+    container_name: edu247-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: edu247
+      POSTGRES_PASSWORD: edu247pass
+      POSTGRES_DB: edu247db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - edu247net
+
+networks:
+  edu247net:
+    driver: bridge
+
+volumes:
+  postgres_data:

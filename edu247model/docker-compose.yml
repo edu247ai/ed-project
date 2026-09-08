@@ -1,0 +1,15 @@
+
+services:
+  edu247-api:
+    build: .
+    container_name: edu247_model
+    ports:
+      - "5000:5000"
+    restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

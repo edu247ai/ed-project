@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/chat_server.c.o -c /home/orcadevstack/edu247/edu247chat/src/chat_server.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/chat_server.c",
+  "output": "CMakeFiles/edu247chat.dir/src/chat_server.c.o"
+},
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/client.c.o -c /home/orcadevstack/edu247/edu247chat/src/client.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/client.c",
+  "output": "CMakeFiles/edu247chat.dir/src/client.c.o"
+},
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/epoll_loop.c.o -c /home/orcadevstack/edu247/edu247chat/src/epoll_loop.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/epoll_loop.c",
+  "output": "CMakeFiles/edu247chat.dir/src/epoll_loop.c.o"
+},
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/go_bridge.c.o -c /home/orcadevstack/edu247/edu247chat/src/go_bridge.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/go_bridge.c",
+  "output": "CMakeFiles/edu247chat.dir/src/go_bridge.c.o"
+},
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/main.c.o -c /home/orcadevstack/edu247/edu247chat/src/main.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/main.c",
+  "output": "CMakeFiles/edu247chat.dir/src/main.c.o"
+},
+{
+  "directory": "/home/orcadevstack/edu247/build",
+  "command": "/usr/bin/gcc  -I/home/orcadevstack/edu247/edu247chat/include -Wall -Wextra -O2 -g -std=gnu11 -o CMakeFiles/edu247chat.dir/src/protocol.c.o -c /home/orcadevstack/edu247/edu247chat/src/protocol.c",
+  "file": "/home/orcadevstack/edu247/edu247chat/src/protocol.c",
+  "output": "CMakeFiles/edu247chat.dir/src/protocol.c.o"
+}
+]

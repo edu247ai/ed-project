@@ -1,0 +1,28 @@
+# Core
+numpy>=1.26
+pandas>=2.0
+
+# ML
+scikit-learn>=1.5
+
+# RL
+gymnasium>=0.29
+
+# RAG
+faiss-cpu>=1.7
+sentence-transformers>=2.2
+
+# API Server
+fastapi>=0.110
+uvicorn>=0.30
+
+# Utilities
+python-dotenv>=1.0
+requests>=2.32
+orjson>=3.10
+rich>=13.7
+pyyaml>=6.0
+cryptography
+sqlalchemy[asyncio]
+asyncpg
+pgvector
