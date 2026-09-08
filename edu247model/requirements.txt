@@ -26,3 +26,4 @@ cryptography
 sqlalchemy[asyncio]
 asyncpg
 pgvector
+alembic
