@@ -41,6 +41,13 @@ const networks: SocialNetwork[] = [
       "M12.53.02c1.31-.02 2.61-.01 3.92-.02.08 1.53.63 3.01 1.72 4.1 1.1 1.1 2.59 1.65 4.12 1.73v4.13c-1.44-.05-2.88-.36-4.22-.98-.58-.26-1.12-.59-1.66-.94-.01 2.86.01 5.71-.02 8.56-.08 1.38-.53 2.75-1.34 3.86-1.32 1.92-3.61 3.18-5.95 3.22-1.44.08-2.88-.31-4.1-1.08-2.01-1.22-3.47-3.72-3.37-6.24.08-1.39.55-2.77 1.4-3.89 1.37-1.88 3.68-3.08 6-3.02.21.01.42.02.63.04.01 1.52-.04 3.04-.04 4.56-1.02-.33-2.22-.24-3.08.43-.63.45-1.1 1.15-1.22 1.92-.14.84.09 1.73.62 2.39.54.69 1.38 1.13 2.26 1.15.58.04 1.17-.12 1.67-.42.83-.5 1.4-1.42 1.42-2.4.04-4.31.02-8.62.04-12.93.01-1.46-.01-2.92.02-4.38Z",
     ],
   },
+  {
+    name: "Discord",
+    href: "/community",
+    paths: [
+      "M19.7 5.4a18.6 18.6 0 0 0-4.6-1.4l-.6 1.2a17.3 17.3 0 0 0-5 0l-.6-1.2a18.6 18.6 0 0 0-4.6 1.4C1.4 9.7.6 14 .9 18.2a18.7 18.7 0 0 0 5.7 2.9l1.2-2a12 12 0 0 1-1.9-.9l.5-.4a13.4 13.4 0 0 0 11.2 0l.5.4a12 12 0 0 1-1.9.9l1.2 2a18.7 18.7 0 0 0 5.7-2.9c.4-4.9-.8-9.2-3.4-12.8ZM8.5 15.2c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z",
+    ],
+  },
 ];
 
 type SocialLinksProps = {
@@ -48,22 +55,36 @@ type SocialLinksProps = {
 };
 
 export function SocialLinks({ variant }: SocialLinksProps) {
+  const visibleNetworks = variant === "footer"
+    ? ["Facebook", "Instagram", "TikTok", "LinkedIn", "Discord"]
+    : ["LinkedIn", "Instagram", "Facebook", "X", "TikTok"];
+  const selectedNetworks = visibleNetworks.map((networkName) => {
+    const network = networks.find(({ name }) => name === networkName);
+    if (!network) {
+      throw new Error(`Missing social network configuration for "${networkName}".`);
+    }
+    return network;
+  });
+
   return (
     <nav className={`social-links social-links-${variant}`} aria-label="EDU247 social media">
-      {networks.map(({ name, href, paths }) => (
-        <a
-          aria-label={`Visit ${name}`}
-          href={href}
-          key={name}
-          rel="noopener noreferrer"
-          target="_blank"
-          title={name}
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-            {paths.map((path) => <path d={path} key={path} />)}
-          </svg>
-        </a>
-      ))}
+      {selectedNetworks.map(({ name, href, paths }) => {
+        const isExternal = href.startsWith("https://");
+        return (
+          <a
+            aria-label={`Visit ${name}`}
+            href={href}
+            key={name}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            target={isExternal ? "_blank" : undefined}
+            title={name}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+              {paths.map((path) => <path d={path} key={path} />)}
+            </svg>
+          </a>
+        );
+      })}
     </nav>
   );
 }

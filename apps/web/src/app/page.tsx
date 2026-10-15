@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import {
@@ -30,35 +31,41 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
 import { DesignCard } from "../components/DesignCard";
 
-const impactFeatures: { title: string; description: string; icon: LucideIcon }[] = [
+const impactFeatures: { title: string; description: string; label: string; icon: LucideIcon }[] = [
   {
     title: "More access to learning",
     description: "Open learning pathways designed to help more people build useful knowledge and skills.",
+    label: "Learning access",
     icon: BookOpenCheck,
   },
   {
     title: "AI that opens possibilities",
     description: "Thoughtful AI tools can give learners and educators new ways to explore and create.",
+    label: "Responsible AI",
     icon: BrainCircuit,
   },
   {
     title: "Opportunity for young people",
     description: "Support curiosity, practical skills, confidence, and pathways to future opportunities.",
+    label: "Future skills",
     icon: Sparkles,
   },
   {
     title: "Support for teachers",
     description: "Give educators more ways to prepare lessons, engage classes, and focus on learners.",
+    label: "Educator tools",
     icon: HandHeart,
   },
   {
     title: "A platform for creators",
     description: "Help educators and creators share learning resources with wider communities.",
+    label: "Creator economy",
     icon: Store,
   },
   {
     title: "Transformation for institutions",
     description: "Connect schools, colleges, and training centers with modern learning experiences.",
+    label: "Connected institutions",
     icon: School,
   },
 ];
@@ -257,37 +264,41 @@ export default function HomePage() {
       <div className="page-shell africa-page-shell">
         <section className="africa-hero" id="top" aria-labelledby="hero-heading">
           <div className="africa-hero-copy">
-            <span className="africa-eyebrow"><Sparkles size={15} /> LEARNING POWERED BY POSSIBILITY</span>
-          <h1 id="hero-heading">Learn, create, and <em>grow without limits.</em></h1>
+            <span className="africa-eyebrow"><Sparkles size={15} /> EDU247 · LEARNING WITHOUT LIMITS</span>
+            <h1 id="hero-heading">Learn, Create, and <em>Grow Without Limits.</em></h1>
             <p>
-            A modern education ecosystem connecting learners, teachers, creators, and
-            institutions with AI-powered tools and opportunities around the world.
+              Education can change what&apos;s possible — discover tools built for developers,
+              educators, and creators.
             </p>
             <div className="africa-hero-actions">
-              <Link className="africa-button africa-button-primary" href="/Dashboard/student-dashboard">
-                Start learning <ArrowRight size={18} />
+              <Link className="africa-button africa-button-primary" href="/auth/register">
+                Get Started <ArrowRight size={18} />
               </Link>
-              <a className="africa-button africa-button-quiet" href="#why-edu247">
-                Explore EDU247 <ArrowUpRight size={17} />
-              </a>
+              <Link className="africa-button africa-button-quiet" href="/community">
+                Join the Community <UsersRound size={17} />
+              </Link>
             </div>
-            <div className="africa-hero-note">
-              <span><HandHeart size={17} /></span>
-              People. Knowledge. AI. A brighter tomorrow.
+            <div className="home-hero-points" aria-label="What you can do with EDU247">
+              <span><BookOpenCheck size={16} /> Learn</span>
+              <span><Palette size={16} /> Create</span>
+              <span><UsersRound size={16} /> Connect</span>
             </div>
           </div>
-          <div className="africa-hero-visual" aria-hidden="true">
-            <div className="africa-visual-orbit africa-visual-orbit-one" />
-            <div className="africa-visual-orbit africa-visual-orbit-two" />
-            <div className="africa-visual-hub"><BrainCircuit size={38} /><span>AI</span></div>
-            <div className="africa-visual-node africa-visual-node-student"><GraduationCap size={22} /></div>
-            <div className="africa-visual-node africa-visual-node-community"><Users size={22} /></div>
-            <div className="africa-visual-node africa-visual-node-learning"><BookOpenCheck size={22} /></div>
-            <div className="africa-visual-node africa-visual-node-progress"><Network size={22} /></div>
-            <span className="africa-visual-caption">People. Knowledge. A brighter tomorrow.</span>
+          <div className="home-hero-art">
+            <span className="home-hero-art-label"><Sparkles size={14} /> LEARNING, REIMAGINED</span>
+            <Image
+              alt="Comic-style illustration of a learner using AI to turn creative ideas into a learning journey"
+              className="home-hero-illustration"
+              height={700}
+              priority
+              sizes="(max-width: 800px) 100vw, 52vw"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/homepage/hero-comic.svg`}
+              width={800}
+            />
+            <span className="home-hero-art-note"><BrainCircuit size={16} /> AI + imagination</span>
           </div>
           <div className="africa-hero-bottom" aria-label="EDU247 values">
-            <span>LEARN</span><span>CREATE</span><span>GROW</span><span>THRIVE</span>
+            <span>AI-POWERED LEARNING</span><span>TOOLS FOR CREATORS</span><span>COMMUNITY THAT GROWS</span>
           </div>
         </section>
 
@@ -301,9 +312,10 @@ export default function HomePage() {
             </p>
           </div>
           <div className="africa-impact-grid">
-            {impactFeatures.map(({ title, description, icon: Icon }, index) => (
+            {impactFeatures.map(({ title, description, label, icon: Icon }, index) => (
               <DesignCard className="africa-impact-card" key={title}>
                 <span className={`africa-card-icon africa-tone-${index % 3}`}><Icon size={22} /></span>
+                <span className="africa-impact-label">{label}</span>
                 <h3>{title}</h3>
                 <p>{description}</p>
               </DesignCard>
