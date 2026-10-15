@@ -1,301 +1,250 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo, useState, type FormEvent } from "react";
+import Link from "next/link";
+import { useState, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  BookOpen,
+  Atom,
+  Award,
   BookOpenCheck,
+  BriefcaseBusiness,
   BrainCircuit,
-  CalendarDays,
   Check,
-  ChevronDown,
-  ChevronRight,
-  Cloud,
   Code2,
   GraduationCap,
+  HandHeart,
+  Languages,
   Lightbulb,
-  Menu,
   Network,
-  Search,
-  Settings,
-  ShieldCheck,
-  ShoppingBag,
+  Palette,
+  Route,
+  School,
   Sparkles,
   Store,
+  UsersRound,
   Users,
-  X,
   type LucideIcon,
 } from "lucide-react";
-import { SocialLinks } from "../components/SocialLinks";
+import { SiteFooter } from "../components/SiteFooter";
+import { SiteHeader } from "../components/SiteHeader";
+import { DesignCard } from "../components/DesignCard";
 
-const navigation = [
-  { label: "Courses", href: "#learning" },
-  { label: "For educators", href: "#teachers" },
-  { label: "AI learning", href: "#ai-tools" },
-  { label: "Marketplace", href: "#marketplace" },
-];
-
-const categories = [
-  { name: "Artificial intelligence", icon: BrainCircuit, href: "#learning" },
-  { name: "Technology", icon: Code2, href: "#learning" },
-  { name: "Teaching & learning", icon: BookOpenCheck, href: "#teachers" },
-  { name: "Creative skills", icon: Lightbulb, href: "#ai-tools" },
-  { name: "Career development", icon: GraduationCap, href: "#roadmap" },
-];
-
-const roles: {
-  name: string;
-  description: string;
-  icon: LucideIcon;
-  color: string;
-  href: string;
-}[] = [
+const impactFeatures: { title: string; description: string; icon: LucideIcon }[] = [
   {
-    name: "Students",
-    description: "Learn new skills and make progress at your own pace.",
-    icon: GraduationCap,
-    color: "mint",
-    href: "#learning",
-  },
-  {
-    name: "Teachers",
-    description: "Create lessons, inspire learners and track progress.",
+    title: "More access to learning",
+    description: "Open learning pathways designed to help more people build useful knowledge and skills.",
     icon: BookOpenCheck,
-    color: "peach",
-    href: "#teachers",
   },
   {
-    name: "Developers",
-    description: "Build useful tools and help shape open education.",
-    icon: Code2,
-    color: "blue",
-    href: "#developers",
+    title: "AI that opens possibilities",
+    description: "Thoughtful AI tools can give learners and educators new ways to explore and create.",
+    icon: BrainCircuit,
   },
   {
-    name: "Vendors",
-    description: "Bring trusted learning resources to more people.",
+    title: "Opportunity for young people",
+    description: "Support curiosity, practical skills, confidence, and pathways to future opportunities.",
+    icon: Sparkles,
+  },
+  {
+    title: "Support for teachers",
+    description: "Give educators more ways to prepare lessons, engage classes, and focus on learners.",
+    icon: HandHeart,
+  },
+  {
+    title: "A platform for creators",
+    description: "Help educators and creators share learning resources with wider communities.",
     icon: Store,
-    color: "lavender",
-    href: "#marketplace",
   },
   {
-    name: "Security reviewers",
-    description: "Help keep contributions and releases safe and trustworthy.",
-    icon: ShieldCheck,
-    color: "blue",
-    href: "#trust",
-  },
-  {
-    name: "Platform admins",
-    description: "Oversee users, content, operations and platform health.",
-    icon: Settings,
-    color: "peach",
-    href: "#platform",
+    title: "Transformation for institutions",
+    description: "Connect schools, colleges, and training centers with modern learning experiences.",
+    icon: School,
   },
 ];
 
-const courses = [
+const roles = [
   {
-    title: "Introduction to Artificial Intelligence",
-    category: "Technology",
-    level: "Beginner · 4 weeks",
-    provider: "EDU247 Learning",
-    credential: "Guided learning path",
-    color: "course-lilac",
-    icon: BrainCircuit,
+    title: "Students",
+    description: "Explore new subjects, grow your skills, and find a path that fits your ambition.",
+    href: "/student",
+    icon: GraduationCap,
+    tone: "mint",
+    action: "Start learning",
   },
   {
-    title: "Web Development Fundamentals",
-    category: "Computer science",
-    level: "Beginner · 6 weeks",
-    provider: "EDU247 Learning",
-    credential: "Course",
-    color: "course-blue",
-    icon: Code2,
-  },
-  {
-    title: "Creative Problem Solving",
-    category: "Personal development",
-    level: "All levels · 3 weeks",
-    provider: "EDU247 Learning",
-    credential: "Course",
-    color: "course-peach",
-    icon: Lightbulb,
-  },
-];
-
-const aiTools: {
-  name: string;
-  description: string;
-  icon: LucideIcon;
-  color: string;
-}[] = [
-  {
-    name: "AI tutor",
-    description: "Get explanations, practice and support that meet you where you are.",
-    icon: BrainCircuit,
-    color: "tool-mint",
-  },
-  {
-    name: "Lesson builder",
-    description: "Turn your ideas into structured, engaging lessons.",
+    title: "Teachers",
+    description: "Create meaningful lessons and bring fresh ideas into your classroom.",
+    href: "/teacher",
     icon: BookOpenCheck,
-    color: "tool-peach",
+    tone: "gold",
+    action: "Explore teaching",
   },
   {
-    name: "Comic creator",
-    description: "Bring learning topics to life as memorable visual stories.",
-    icon: Sparkles,
-    color: "tool-lilac",
+    title: "Vendors & creators",
+    description: "Share useful educational products and resources with learners and educators.",
+    href: "/vendor",
+    icon: Store,
+    tone: "blue",
+    action: "Explore the marketplace",
+  },
+];
+
+const learningAreas: { title: string; description: string; icon: LucideIcon }[] = [
+  {
+    title: "Courses for every goal",
+    description: "Explore subjects and skills for learning, work, and everyday life.",
+    icon: BookOpenCheck,
   },
   {
-    name: "Infographic creator",
-    description: "Make clear visual summaries from lessons and notes.",
-    icon: Network,
-    color: "tool-blue",
-  },
-  {
-    name: "Mind map creator",
-    description: "Organize complex ideas into connected, useful maps.",
+    title: "Practical skills",
+    description: "Build knowledge through guided activities and relevant real-world practice.",
     icon: Lightbulb,
-    color: "tool-yellow",
   },
   {
-    name: "Smart recommendations",
-    description: "Find learning content and opportunities chosen for you.",
-    icon: ArrowUpRight,
-    color: "tool-rose",
-  },
-  {
-    name: "AI code reviewer",
-    description: "Help developers inspect changes and improve code quality.",
-    icon: Code2,
-    color: "tool-blue",
-  },
-  {
-    name: "AI security auditor",
-    description: "Support security reviews with focused analysis and findings.",
-    icon: ShieldCheck,
-    color: "tool-mint",
-  },
-  {
-    name: "Documentation engine",
-    description: "Turn technical work into clearer, easier-to-follow guides.",
-    icon: BookOpen,
-    color: "tool-peach",
-  },
-];
-
-const deliveryPhases = [
-  {
-    number: "01",
-    name: "Foundation",
-    timing: "Weeks 1–6",
-    description: "Validate requirements, architecture and design; establish delivery and developer workflows.",
-    icon: CalendarDays,
-    color: "phase-mint",
-  },
-  {
-    number: "02",
-    name: "Core platform",
-    timing: "Weeks 7–16",
-    description: "Build identity, core services, learning experiences and the first administration tools.",
+    title: "Learning paths",
+    description: "Follow a clear sequence of lessons as you work toward your next goal.",
     icon: Network,
-    color: "phase-blue",
   },
   {
-    number: "03",
-    name: "AI capabilities",
-    timing: "Weeks 17–28",
-    description: "Introduce the tutor, lesson builder and creative tools with evaluation and human oversight.",
+    title: "AI tutor",
+    description: "Get extra explanations and practice support when you need a hand.",
     icon: BrainCircuit,
-    color: "phase-lilac",
   },
   {
-    number: "04",
-    name: "Marketplace",
-    timing: "Weeks 29–36",
-    description: "Develop vendor onboarding, product discovery, checkout and delivery integrations.",
-    icon: ShoppingBag,
-    color: "phase-peach",
-  },
-  {
-    number: "05",
-    name: "Community",
-    timing: "Weeks 37–44",
-    description: "Grow developer onboarding, contribution practices, hackathons and security review.",
-    icon: Users,
-    color: "phase-yellow",
-  },
-  {
-    number: "06",
-    name: "Pilot & readiness",
-    timing: "Weeks 45–52",
-    description: "Test with representative users, resolve priority issues and assess launch readiness.",
+    title: "Certifications",
+    description: "Work toward recognizing the skills and knowledge you build.",
     icon: Check,
-    color: "phase-green",
   },
 ];
 
-const products = [
+const popularCourses: { title: string; description: string; icon: LucideIcon; label: string }[] = [
   {
-    name: "STEM Activity Kit",
-    kind: "Digital resource",
-    price: "$19.99",
+    title: "AI foundations for everyone",
+    description: "Understand core AI ideas and learn how to use emerging tools thoughtfully.",
+    icon: BrainCircuit,
+    label: "Technology",
+  },
+  {
+    title: "Digital skills for work and life",
+    description: "Build practical confidence with the digital tools used in study and work.",
+    icon: Code2,
+    label: "Career skills",
+  },
+  {
+    title: "Creative problem solving",
+    description: "Explore ways to turn questions into ideas, prototypes, and useful solutions.",
+    icon: Lightbulb,
+    label: "Creative skills",
+  },
+];
+
+const categories: { title: string; description: string; icon: LucideIcon }[] = [
+  {
+    title: "STEM",
+    description: "Explore science, mathematics, engineering, and discovery.",
+    icon: Atom,
+  },
+  {
+    title: "Business",
+    description: "Develop practical knowledge for enterprise and work.",
+    icon: BriefcaseBusiness,
+  },
+  {
+    title: "Technology",
+    description: "Build confidence with digital tools, computing, and AI.",
+    icon: Code2,
+  },
+  {
+    title: "Creative arts",
+    description: "Learn through design, storytelling, media, and making.",
+    icon: Palette,
+  },
+  {
+    title: "Languages",
+    description: "Practice communication and connect across languages.",
+    icon: Languages,
+  },
+  {
+    title: "Professional skills",
+    description: "Grow the transferable skills that support lifelong careers.",
+    icon: Award,
+  },
+];
+
+const platformOffers: { title: string; description: string; icon: LucideIcon; href: string; action: string }[] = [
+  {
+    title: "Learning",
+    description: "Explore courses, build skills, and follow a path toward your goals.",
+    icon: BookOpenCheck,
+    href: "/learn",
+    action: "Explore learning",
+  },
+  {
+    title: "Teaching",
+    description: "Plan lessons, create resources, and support learners in your classes.",
+    icon: GraduationCap,
+    href: "/teach",
+    action: "Explore teaching",
+  },
+  {
+    title: "Marketplace",
+    description: "Discover educational resources and support independent creators.",
+    icon: Store,
+    href: "/marketplace",
+    action: "Visit marketplace",
+  },
+  {
+    title: "AI tools",
+    description: "Use thoughtful AI assistance to explore ideas and support learning.",
+    icon: BrainCircuit,
+    href: "/learn#ai-tools",
+    action: "Explore AI tools",
+  },
+  {
+    title: "Community",
+    description: "Connect with learners, educators, and creators around shared goals.",
+    icon: UsersRound,
+    href: "/community",
+    action: "Meet the community",
+  },
+  {
+    title: "Institutional solutions",
+    description: "Bring connected digital learning experiences to your institution.",
+    icon: School,
+    href: "/institutions",
+    action: "Explore institutions",
+  },
+];
+
+const creatorTools: { title: string; description: string; icon: LucideIcon }[] = [
+  {
+    title: "Lesson builder",
+    description: "Shape an idea into a clear lesson plan and classroom activity.",
+    icon: BookOpenCheck,
+  },
+  {
+    title: "Infographic creator",
+    description: "Turn important concepts into visual summaries learners can revisit.",
     icon: Network,
-    color: "product-mint",
   },
   {
-    name: "Interactive Science Workbook",
-    kind: "eBook",
-    price: "$9.99",
-    icon: BookOpen,
-    color: "product-peach",
-  },
-  {
-    name: "Educator Template Pack",
-    kind: "Resource bundle",
-    price: "$14.99",
-    icon: Sparkles,
-    color: "product-lilac",
+    title: "Comic creator",
+    description: "Use visual storytelling to make lessons memorable and engaging.",
+    icon: Palette,
   },
 ];
 
-function Brand({ footer = false }: { footer?: boolean }) {
-  return (
-    <a className={`brand${footer ? " brand-footer" : ""}`} href="#top" aria-label="EDU247 home">
-      <Image
-        src="/logoimg/edu247-logo.png"
-        alt=""
-        width={footer ? 42 : 38}
-        height={footer ? 42 : 38}
-        priority={!footer}
-      />
-      <span>
-        <strong>EDU<span>247</span></strong>
-        {footer && <small>Learn without limits.</small>}
-      </span>
-    </a>
-  );
-}
+const impactMeasures = [
+  { label: "Learners reached", icon: GraduationCap },
+  { label: "Teachers supported", icon: HandHeart },
+  { label: "Institutions onboarded", icon: School },
+  { label: "Marketplace creators", icon: Store },
+  { label: "Courses available", icon: BookOpenCheck },
+];
 
 export default function HomePage() {
-  const [query, setQuery] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [newsletterMessage, setNewsletterMessage] = useState("");
-
-  const filteredCourses = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    if (!normalizedQuery) return courses;
-
-    return courses.filter((course) =>
-      `${course.title} ${course.category} ${course.level}`
-        .toLowerCase()
-        .includes(normalizedQuery),
-    );
-  }, [query]);
 
   function handleNewsletterSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -303,460 +252,337 @@ export default function HomePage() {
   }
 
   return (
-    <main>
-      <header className="site-header">
-        <div className="audience-bar">
-          <div className="audience-inner">
-            <a className="audience-active" href="#learning">For learners</a>
-            <a href="#teachers">For educators</a>
-            <a href="#platform">For institutions</a>
-            <a href="#developers">For builders</a>
-            <SocialLinks variant="header" />
-          </div>
-        </div>
-        <div className="header-inner">
-          <Brand />
-          <button
-            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-            aria-expanded={menuOpen}
-            className="menu-toggle"
-            onClick={() => setMenuOpen((open) => !open)}
-            type="button"
-          >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-          <a className="explore-link" href="#categories">Explore <ChevronDown size={15} /></a>
-          <nav className={`main-nav${menuOpen ? " nav-open" : ""}`} aria-label="Main navigation">
-            {navigation.map((item) => (
-              <a key={item.label} href={item.href} onClick={() => setMenuOpen(false)}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <label className="header-search">
-            <Search aria-hidden="true" size={17} />
-            <input
-              aria-label="Search courses"
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="What do you want to learn?"
-              type="search"
-              value={query}
-            />
-            <span className="search-submit"><Search size={17} /></span>
-          </label>
-          <div className="header-actions">
-            <a className="sign-in-link" href="/auth/login">Sign in</a>
-            <a className="button button-small button-outline" href="/auth/register">
-              Join EDU247
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <div className="page-shell">
-        <section className="hero" id="top" aria-labelledby="hero-heading">
-          <div className="hero-feature">
-            <div className="hero-content">
-              <div className="eyebrow"><span /> LEARNING THAT MOVES YOU FORWARD</div>
-              <h1 id="hero-heading">Learn without limits.</h1>
-              <p>
-                Build real-world skills, explore what interests you, and make
-                your next move with learning designed for everyone.
-              </p>
-              <div className="hero-actions">
-                <a className="button button-hero" href="#learning">
-                  Explore courses <ArrowRight size={17} />
-                </a>
-                <a className="hero-text-link" href="#about">
-                  Discover EDU247 <ArrowUpRight size={16} />
-                </a>
-              </div>
-              <div className="hero-proof">
-                <span><GraduationCap size={17} /></span>
-                Courses, creative tools and community—all in one place.
-              </div>
-            </div>
-            <div className="hero-art" aria-hidden="true">
-              <div className="hero-art-orbit hero-art-orbit-one" />
-              <div className="hero-art-orbit hero-art-orbit-two" />
-              <div className="hero-art-book"><BookOpen size={75} strokeWidth={1.15} /><span>YOUR NEXT CHAPTER</span></div>
-              <div className="hero-art-badge hero-art-badge-top"><Sparkles size={16} /> A new skill</div>
-              <div className="hero-art-badge hero-art-badge-bottom"><Check size={15} /> Keep growing</div>
-              <div className="hero-art-stamp">247</div>
-            </div>
-          </div>
-          <aside className="hero-side-card">
-            <span className="hero-side-kicker">A WORLD OF LEARNING</span>
-            <h2>Make your next move a learning one.</h2>
-            <p>Whether you&apos;re starting out or moving forward, there&apos;s a path for you.</p>
-            <div className="hero-side-list">
-              <a href="#learning"><span className="side-list-icon side-icon-blue"><BrainCircuit size={17} /></span><span><strong>Explore a new subject</strong><small>Start with what makes you curious</small></span><ChevronRight size={17} /></a>
-              <a href="#teachers"><span className="side-list-icon side-icon-green"><BookOpenCheck size={17} /></span><span><strong>Bring learning to your class</strong><small>Tools for teachers and educators</small></span><ChevronRight size={17} /></a>
-              <a href="#developers"><span className="side-list-icon side-icon-gold"><Code2 size={17} /></span><span><strong>Build the future with us</strong><small>Meet the EDU247 community</small></span><ChevronRight size={17} /></a>
-            </div>
-            <a className="hero-side-link" href="#about">See what you can do <ArrowRight size={15} /></a>
-          </aside>
-        </section>
-
-        <section className="category-section" id="categories" aria-label="Explore learning categories">
-          <div className="category-heading">
-            <div><span className="section-kicker">FIND YOUR DIRECTION</span><h2>What would you like to learn?</h2></div>
-            <a className="text-link" href="#learning">Browse all learning <ArrowRight size={16} /></a>
-          </div>
-          <div className="category-list">
-            {categories.map(({ name, icon: Icon, href }) => (
-              <a className="category-chip" href={href} key={name}>
-                <Icon size={18} />
-                <span>{name}</span>
-                <ChevronRight size={15} />
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section className="section intro-section" id="about">
-          <div className="section-heading">
-            <div>
-              <span className="section-kicker">LEARNING FOR EVERY KIND OF AMBITION</span>
-              <h2>Find the learning path that fits you.</h2>
-            </div>
-            <p>Build knowledge for your next goal, create better learning experiences, or join the people building what comes next.</p>
-          </div>
-          <div className="role-grid">
-            {roles.map(({ name, description, icon: Icon, color, href }) => (
-              <a className="role-card" href={href} key={name}>
-                <span className={`role-icon ${color}`}><Icon size={23} strokeWidth={1.8} /></span>
-                <span className="role-copy"><strong>{name}</strong><small>{description}</small></span>
-                <ChevronRight className="role-arrow" size={18} />
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section className="section learning-section" id="learning">
-          <div className="section-heading section-heading-compact">
-            <div>
-              <span className="section-kicker">POPULAR ON EDU247</span>
-              <h2>Start, switch, or advance your skills.</h2>
-              <p className="section-subtitle">Explore instructor-guided courses and learning paths for what matters to you.</p>
-            </div>
-            <a className="text-link" href="#get-started">View all courses <ArrowRight size={16} /></a>
-          </div>
-          {query.trim() && (
-            <p className="search-feedback" aria-live="polite">
-              Showing {filteredCourses.length} learning {filteredCourses.length === 1 ? "path" : "paths"} for “{query}”
+    <main className="africa-home">
+      <SiteHeader activeAudience="For learners" />
+      <div className="page-shell africa-page-shell">
+        <section className="africa-hero" id="top" aria-labelledby="hero-heading">
+          <div className="africa-hero-copy">
+            <span className="africa-eyebrow"><Sparkles size={15} /> LEARNING POWERED BY POSSIBILITY</span>
+          <h1 id="hero-heading">Learn, create, and <em>grow without limits.</em></h1>
+            <p>
+            A modern education ecosystem connecting learners, teachers, creators, and
+            institutions with AI-powered tools and opportunities around the world.
             </p>
-          )}
-          {filteredCourses.length > 0 ? (
-            <div className="course-grid">
-              {filteredCourses.map(({ title, category, level, provider, credential, color, icon: Icon }) => (
-                <article className="course-card" key={title}>
-                  <div className={`course-art ${color}`}>
-                    <Icon size={31} strokeWidth={1.45} />
-                    <span>{credential}</span>
-                    <div className="art-shape art-shape-one" />
-                    <div className="art-shape art-shape-two" />
-                  </div>
-                  <div className="course-info">
-                    <div className="course-provider">{provider}</div>
-                    <h3>{title}</h3>
-                    <div className="course-rating">
-                      <span>{category}</span>
-                      <span className="course-dot" />
-                      <span>{level}</span>
-                    </div>
-                  </div>
-                  <a href="#get-started" className="course-link" aria-label={`Continue ${title}`}><ArrowUpRight size={17} /></a>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-search">
-              <Search size={23} />
-              <strong>No learning paths found</strong>
-              <span>Try another course title or topic.</span>
-              <button onClick={() => setQuery("")} type="button">Clear search</button>
-            </div>
-          )}
-        </section>
-
-        <section className="section ai-section" id="ai-tools">
-          <div className="ai-section-intro">
-            <span className="section-kicker">A LITTLE MORE “WHAT IF?”</span>
-            <h2>Big ideas deserve<br />brilliant tools.</h2>
-            <p>Helpful AI that supports the people doing the learning and teaching. Your imagination stays in the driver&apos;s seat.</p>
-            <a className="button button-light" href="#get-started">Meet your AI toolkit <ArrowRight size={16} /></a>
-            <div className="responsible-note"><ShieldCheck size={17} /><span>Built with care.<br /><strong>People stay in control.</strong></span></div>
-          </div>
-          <div className="ai-tool-grid">
-            {aiTools.map(({ name, description, icon: Icon, color }, index) => (
-              <a className="ai-tool-card" href="#get-started" key={name}>
-                <span className={`tool-icon ${color}`}><Icon size={21} strokeWidth={1.8} /></span>
-                <span className="tool-number">0{index + 1}</span>
-                <strong>{name}</strong>
-                <small>{description}</small>
-                <span className="tool-arrow"><ArrowUpRight size={15} /></span>
+            <div className="africa-hero-actions">
+              <Link className="africa-button africa-button-primary" href="/Dashboard/student-dashboard">
+                Start learning <ArrowRight size={18} />
+              </Link>
+              <a className="africa-button africa-button-quiet" href="#why-edu247">
+                Explore EDU247 <ArrowUpRight size={17} />
               </a>
-            ))}
-          </div>
-        </section>
-
-        <section className="section teacher-section" id="teachers">
-          <div className="teacher-visual">
-            <div className="teacher-visual-top"><span className="live-dot" /> YOUR TEACHING STUDIO</div>
-            <div className="studio-card">
-              <div className="studio-card-head"><div><span>COURSE BUILDER</span><strong>Make room for wonder.</strong></div><Sparkles size={20} /></div>
-              <div className="lesson-preview">
-                <div className="lesson-preview-art"><Network size={31} /><span>LESSON 01</span></div>
-                <div><span className="preview-label">A NEW LESSON</span><strong>Explore the natural world</strong><small>Made for your classroom, with a little help from AI.</small></div>
-              </div>
-              <div className="studio-footer"><span><Check size={14} /> Ready for your learners</span><span>Draft saved</span></div>
             </div>
-            <div className="teacher-floating"><span><Lightbulb size={17} /></span><div><strong>Your idea, made teachable.</strong><small>Start with what inspires you.</small></div></div>
-          </div>
-          <div className="teacher-copy">
-            <span className="section-kicker">FOR THE PEOPLE WHO INSPIRE US</span>
-            <h2>Make teaching feel a little more <em>limitless.</em></h2>
-            <p>Spend less time wrestling with busywork and more time doing what matters: helping every learner find their spark.</p>
-            <ul>
-              <li><Check size={16} /> Build courses and lessons with a thoughtful AI partner</li>
-              <li><Check size={16} /> Bring learning to life with comics, maps and visuals</li>
-              <li><Check size={16} /> Keep assignments and learner progress in one place</li>
-            </ul>
-            <a className="text-link" href="#get-started">Discover tools for teachers <ArrowRight size={16} /></a>
-          </div>
-        </section>
-
-        <section className="section marketplace-section" id="marketplace">
-          <div className="marketplace-heading">
-            <div>
-              <span className="section-kicker">GOOD THINGS, MADE FOR LEARNING</span>
-              <h2>Find something that sparks.</h2>
-              <p>Discover resources from educators, creators and trusted vendors.</p>
+            <div className="africa-hero-note">
+              <span><HandHeart size={17} /></span>
+              People. Knowledge. AI. A brighter tomorrow.
             </div>
-            <a className="text-link" href="#get-started">Visit the marketplace <ArrowRight size={16} /></a>
           </div>
-          <div className="product-grid">
-            {products.map(({ name, kind, price, icon: Icon, color }) => (
-              <article className="product-card" key={name}>
-                <div className={`product-art ${color}`}>
-                  <Icon size={42} strokeWidth={1.25} />
-                  <span className="product-tag">EDU247 PICK</span>
-                </div>
-                <div className="product-details">
-                  <div><span>{kind}</span><h3>{name}</h3></div>
-                  <strong>{price}</strong>
-                </div>
-                <a href="#get-started" aria-label={`Discover ${name}`} className="product-action"><ArrowUpRight size={17} /></a>
-              </article>
-            ))}
+          <div className="africa-hero-visual" aria-hidden="true">
+            <div className="africa-visual-orbit africa-visual-orbit-one" />
+            <div className="africa-visual-orbit africa-visual-orbit-two" />
+            <div className="africa-visual-hub"><BrainCircuit size={38} /><span>AI</span></div>
+            <div className="africa-visual-node africa-visual-node-student"><GraduationCap size={22} /></div>
+            <div className="africa-visual-node africa-visual-node-community"><Users size={22} /></div>
+            <div className="africa-visual-node africa-visual-node-learning"><BookOpenCheck size={22} /></div>
+            <div className="africa-visual-node africa-visual-node-progress"><Network size={22} /></div>
+            <span className="africa-visual-caption">People. Knowledge. A brighter tomorrow.</span>
+          </div>
+          <div className="africa-hero-bottom" aria-label="EDU247 values">
+            <span>LEARN</span><span>CREATE</span><span>GROW</span><span>THRIVE</span>
           </div>
         </section>
 
-        <section className="section ecosystem-section" id="developers">
-          <div className="ecosystem-heading">
-            <span className="section-kicker">A PLATFORM BUILT TO GROW</span>
-            <h2>Many parts. One shared purpose.</h2>
-            <p>EDU247 is a connected ecosystem, thoughtfully developed in stages — with people, safety and useful learning at the center.</p>
+        <section className="africa-impact-intro" id="why-edu247" aria-labelledby="impact-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">WHY EDU247 MATTERS</span>
+            <h2 id="impact-heading">Education can change what&apos;s possible.</h2>
+            <p>
+              Talent and ambition are everywhere. EDU247 is being shaped to connect
+              that potential with learning, tools, and opportunity around the world.
+            </p>
           </div>
-          <div className="ecosystem-grid">
-            <article className="ecosystem-card ecosystem-card-learning">
-              <span className="ecosystem-icon"><GraduationCap size={22} /></span>
-              <span className="ecosystem-label">01 / LEARNING</span>
-              <h3>Learning that meets you where you are.</h3>
-              <p>Courses, lessons, assignments and progress tools for students and teachers.</p>
-              <div className="ecosystem-pills"><span>Courses</span><span>Assignments</span><span>Progress</span></div>
-            </article>
-            <article className="ecosystem-card ecosystem-card-ai">
-              <span className="ecosystem-icon"><BrainCircuit size={22} /></span>
-              <span className="ecosystem-label">02 / AI STUDIO</span>
-              <h3>Human creativity, with a helpful boost.</h3>
-              <p>Tutor, lesson and visual-creation tools built to support—not replace—people.</p>
-              <div className="ecosystem-pills"><span>AI tutor</span><span>Creation tools</span><span>Human review</span></div>
-            </article>
-            <article className="ecosystem-card ecosystem-card-dev">
-              <span className="ecosystem-icon"><Code2 size={22} /></span>
-              <span className="ecosystem-label">03 / BUILDERS</span>
-              <h3>Open doors for people who build.</h3>
-              <p>Developer resources, contribution workflows, collaboration and hackathons.</p>
-              <div className="ecosystem-pills"><span>Developer portal</span><span>Community</span><span>Hackathons</span></div>
-            </article>
-            <article className="ecosystem-card ecosystem-card-market">
-              <span className="ecosystem-icon"><ShoppingBag size={22} /></span>
-              <span className="ecosystem-label">04 / MARKET</span>
-              <h3>Useful resources, all in one place.</h3>
-              <p>A marketplace concept for trusted digital and physical education products.</p>
-              <div className="ecosystem-pills"><span>Digital</span><span>Physical</span><span>Vendors</span></div>
-            </article>
-            <article className="ecosystem-card ecosystem-card-trust" id="trust">
-              <span className="ecosystem-icon"><ShieldCheck size={22} /></span>
-              <span className="ecosystem-label">05 / TRUST &amp; SAFETY</span>
-              <h3>Designed with care from the start.</h3>
-              <p>Privacy, access controls, moderation and responsible AI are part of the plan.</p>
-              <div className="ecosystem-pills"><span>Privacy</span><span>Safety</span><span>Oversight</span></div>
-            </article>
-            <article className="ecosystem-card ecosystem-card-admin" id="platform">
-              <span className="ecosystem-icon"><Network size={22} /></span>
-              <span className="ecosystem-label">06 / PLATFORM</span>
-              <h3>One foundation. Room to evolve.</h3>
-              <p>Connected services, integrations and administration built to scale in phases.</p>
-              <div className="ecosystem-pills"><span>Services</span><span>Integrations</span><span>Analytics</span></div>
-            </article>
-          </div>
-          <div className="architecture-note">
-            <div className="architecture-mark"><Network size={18} /></div>
-            <p><strong>A clear technical boundary.</strong> Core platform services are planned in Go. Dedicated AI services are planned in Python, connected through versioned APIs and events.</p>
-            <a href="#get-started">How we build <ArrowUpRight size={15} /></a>
-          </div>
-        </section>
-
-        <section className="section journey-section" id="journey">
-          <div className="ecosystem-heading">
-            <span className="section-kicker">FROM FIRST IDEA TO REAL-WORLD IMPACT</span>
-            <h2>One journey, connected end to end.</h2>
-            <p>Learning, creation, review and delivery are designed to work together—with clear roles and human oversight at every step.</p>
-          </div>
-          <div className="journey-steps">
-            <article className="journey-step">
-              <span className="journey-number">01</span>
-              <span className="journey-icon"><BookOpenCheck size={20} /></span>
-              <span className="journey-label">CREATE</span>
-              <h3>Teachers shape the learning.</h3>
-              <p>Build courses, lessons and activities, with AI tools to help turn ideas into useful materials.</p>
-            </article>
-            <article className="journey-step">
-              <span className="journey-number">02</span>
-              <span className="journey-icon"><GraduationCap size={20} /></span>
-              <span className="journey-label">LEARN</span>
-              <h3>Students find their next step.</h3>
-              <p>Explore lessons, get tutor support, complete assignments and follow personal progress.</p>
-            </article>
-            <article className="journey-step">
-              <span className="journey-number">03</span>
-              <span className="journey-icon"><ShieldCheck size={20} /></span>
-              <span className="journey-label">REVIEW</span>
-              <h3>People keep quality in focus.</h3>
-              <p>Moderation, security review and audit workflows help protect users and platform integrity.</p>
-            </article>
-            <article className="journey-step">
-              <span className="journey-number">04</span>
-              <span className="journey-icon"><Store size={20} /></span>
-              <span className="journey-label">DISCOVER</span>
-              <h3>Good resources find their people.</h3>
-              <p>Vendors can list educational products for discovery, purchase and delivery through the marketplace.</p>
-            </article>
-            <article className="journey-step">
-              <span className="journey-number">05</span>
-              <span className="journey-icon"><Settings size={20} /></span>
-              <span className="journey-label">IMPROVE</span>
-              <h3>Feedback makes the platform better.</h3>
-              <p>Administrators use oversight and analytics to guide operations, improvements and future releases.</p>
-            </article>
-          </div>
-          <div className="journey-footnote"><ShieldCheck size={16} /><span>Privacy, accessibility and responsible AI are part of the journey—not a final step.</span></div>
-        </section>
-
-        <section className="section roadmap-section" id="roadmap">
-          <div className="section-heading roadmap-heading">
-            <div>
-              <span className="section-kicker">A THOUGHTFUL PATH TO DELIVERY</span>
-              <h2>Build it in meaningful stages.</h2>
-              <p className="section-subtitle">A proposed 52-week sequence from discovery foundations to pilot readiness.</p>
-            </div>
-            <span className="roadmap-status">Initial planning model</span>
-          </div>
-          <div className="roadmap-grid">
-            {deliveryPhases.map(({ number, name, timing, description, icon: Icon, color }) => (
-              <article className="roadmap-card" key={number}>
-                <div className="roadmap-card-top">
-                  <span className={`roadmap-icon ${color}`}><Icon size={19} /></span>
-                  <span className="roadmap-number">{number}</span>
-                </div>
-                <span className="roadmap-timing">{timing}</span>
-                <h3>{name}</h3>
+          <div className="africa-impact-grid">
+            {impactFeatures.map(({ title, description, icon: Icon }, index) => (
+              <DesignCard className="africa-impact-card" key={title}>
+                <span className={`africa-card-icon africa-tone-${index % 3}`}><Icon size={22} /></span>
+                <h3>{title}</h3>
                 <p>{description}</p>
-              </article>
+              </DesignCard>
             ))}
           </div>
-          <p className="roadmap-disclaimer">Indicative sequencing only. Detailed scope, dependencies, resources and dates will be validated during discovery and pilot planning.</p>
         </section>
 
-        <section className="community-band" id="community">
-          <div className="community-art" aria-hidden="true">
-            <span className="community-avatar avatar-a"><GraduationCap size={18} /></span>
-            <span className="community-avatar avatar-b"><Code2 size={17} /></span>
-            <span className="community-avatar avatar-c"><Lightbulb size={17} /></span>
-            <span className="community-avatar avatar-d"><BookOpen size={17} /></span>
-            <span className="community-center"><Users size={27} /></span>
+        <section className="africa-roles" id="roles" aria-labelledby="roles-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">A PLACE FOR YOUR AMBITION</span>
+            <h2 id="roles-heading">Choose how you&apos;ll grow.</h2>
+            <p>Whether you are learning, teaching, or sharing resources, there is a place to begin.</p>
           </div>
-          <div className="community-copy">
-            <span className="section-kicker">BETTER, TOGETHER</span>
-            <h2>Build together.<br />Learn together.</h2>
-            <p>Meet the educators, learners and builders who believe education can open more doors.</p>
-          </div>
-          <div className="community-cta">
-            <span>Curiosity looks good on everyone.</span>
-            <a className="button button-dark" href="#get-started">Find your community <ArrowRight size={16} /></a>
+          <div className="africa-role-grid">
+            {roles.map(({ title, description, href, icon: Icon, tone, action }) => (
+              <Link className="africa-role-link" href={href} key={title}>
+                <DesignCard className="africa-role-card">
+                  <span className={`africa-role-icon africa-role-${tone}`}><Icon size={25} /></span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                  <span className="africa-card-action">{action}<ArrowRight size={16} /></span>
+                </DesignCard>
+              </Link>
+            ))}
           </div>
         </section>
 
-        <section className="stats-strip" aria-label="EDU247 community goals">
-          <div><span className="stat-icon stat-mint"><Users size={21} /></span><span><strong>Every learner</strong><small>Belongs here</small></span></div>
-          <div><span className="stat-icon stat-peach"><BookOpen size={21} /></span><span><strong>More ways to learn</strong><small>One connected place</small></span></div>
-          <div><span className="stat-icon stat-blue"><Code2 size={21} /></span><span><strong>More room to build</strong><small>Ideas welcome</small></span></div>
-          <div><span className="stat-icon stat-lilac"><Store size={21} /></span><span><strong>Good things to discover</strong><small>Learning resources</small></span></div>
+        <section className="africa-learning" id="learning" aria-labelledby="learning-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">LEARNING OPPORTUNITIES</span>
+            <h2 id="learning-heading">Take your next step, your way.</h2>
+            <p>Build practical skills and explore subjects that matter to your future.</p>
+          </div>
+          <div className="africa-learning-grid">
+            {learningAreas.map(({ title, description, icon: Icon }) => (
+              <DesignCard className="africa-learning-card" key={title}>
+                <span><Icon size={21} /></span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </DesignCard>
+            ))}
+          </div>
+          <Link className="africa-inline-link" href="/learn">Explore learning <ArrowRight size={16} /></Link>
         </section>
 
-        <section className="get-started newsletter-section" id="get-started" aria-labelledby="newsletter-title">
-          <div className="newsletter-copy">
-            <span className="newsletter-kicker"><Cloud size={15} /> EDU247 COMMUNITY</span>
-            <h2 id="newsletter-title">Subscribe to news<br />about <em>EDU247.</em></h2>
-            <p>Get EDU247 updates, community news, events and practical learning highlights from EDU247.</p>
+        <section className="africa-learning" id="courses" aria-labelledby="courses-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">COURSES &amp; SKILLS</span>
+            <h2 id="courses-heading">Start with a skill that moves you forward.</h2>
+            <p>
+              Explore sample learning journeys across technology, work, and creativity.
+              Course listings and certifications are being prepared for the platform.
+            </p>
           </div>
-          <div className="newsletter-panel">
-            <span className="newsletter-panel-title">Stay up to date</span>
-            <p>One useful update at a time. Sign up with your email address.</p>
-            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-              <label className="newsletter-email-label" htmlFor="newsletter-email">Email address</label>
-              <input
-                autoComplete="email"
-                id="newsletter-email"
-                name="email"
-                placeholder="Your email address"
-                type="email"
-                required
-              />
-              <button className="button button-dark" type="submit">Subscribe <ArrowRight size={16} /></button>
+          <div className="africa-impact-grid">
+            {popularCourses.map(({ title, description, icon: Icon, label }) => (
+              <DesignCard className="africa-impact-card" key={title}>
+                <span className="africa-card-icon"><Icon size={22} /></span>
+                <span className="africa-course-label">{label} · Learning journey preview</span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <Link className="africa-inline-link" href="/learn">
+                  Explore learning <ArrowRight size={16} />
+                </Link>
+              </DesignCard>
+            ))}
+          </div>
+          <div className="africa-course-paths" aria-label="Learning features">
+            <span><BrainCircuit size={18} /> AI-powered learning tools</span>
+            <span><Route size={18} /> Guided learning paths</span>
+            <span><Award size={18} /> Certifications in development</span>
+          </div>
+        </section>
+
+        <section className="africa-learning" id="categories" aria-labelledby="categories-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">EXPLORE BY CATEGORY</span>
+            <h2 id="categories-heading">A place to begin, whatever your ambition.</h2>
+            <p>Find a subject area that matches your interests, experience, and next goal.</p>
+          </div>
+          <div className="africa-learning-grid">
+            {categories.map(({ title, description, icon: Icon }) => (
+              <DesignCard className="africa-learning-card" key={title}>
+                <span><Icon size={21} /></span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <Link className="africa-inline-link" href="/learn">
+                  Explore {title} <ArrowRight size={16} />
+                </Link>
+              </DesignCard>
+            ))}
+          </div>
+        </section>
+
+        <section className="africa-teaching" id="teaching" aria-labelledby="teaching-heading">
+          <div className="africa-teaching-copy">
+            <span className="africa-kicker">FOR EDUCATORS</span>
+            <h2 id="teaching-heading">More time for the moments that matter.</h2>
+            <p>
+              Support your teaching with tools that help you plan, create, and bring ideas
+              to life—while keeping your expertise at the heart of every lesson.
+            </p>
+            <ul>
+              {creatorTools.map(({ title }) => <li key={title}><Check size={17} />{title}</li>)}
+              <li><Check size={17} />Tools for classes, learners, and progress</li>
+            </ul>
+            <Link className="africa-inline-link" href="/teach">Explore tools for teachers <ArrowRight size={16} /></Link>
+          </div>
+          <div className="africa-creator-grid">
+            {creatorTools.map(({ title, description, icon: Icon }, index) => (
+              <DesignCard className={`africa-creator-card africa-creator-${index + 1}`} key={title}>
+                <span><Icon size={23} /></span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </DesignCard>
+            ))}
+            <div className="africa-creator-quote"><Sparkles size={19} /><span>Your ideas can inspire a whole classroom.</span></div>
+          </div>
+        </section>
+
+        <section className="africa-marketplace" id="marketplace" aria-labelledby="marketplace-heading">
+          <div className="africa-marketplace-art" aria-hidden="true">
+            <span className="africa-marketplace-orbit" />
+            <span className="africa-marketplace-symbol"><Store size={38} /></span>
+            <span className="africa-marketplace-badge"><Palette size={17} /> Creator-led learning</span>
+          </div>
+          <div className="africa-marketplace-copy">
+            <span className="africa-kicker">MADE FOR LEARNING. OPEN TO EVERYONE.</span>
+            <h2 id="marketplace-heading">A marketplace where creators can thrive.</h2>
+            <p>
+              Discover digital resources, educational products, and affordable learning
+              tools—while creating more ways for African educators and creators to share
+              their work with learners around the world.
+            </p>
+            <div className="africa-marketplace-tags"><span>Digital resources</span><span>Learning products</span><span>Independent creators</span></div>
+            <Link className="africa-button africa-button-primary" href="/marketplace">
+              Explore the marketplace <ArrowRight size={17} />
+            </Link>
+          </div>
+        </section>
+
+        <section className="africa-community" id="community" aria-labelledby="community-heading">
+          <div className="africa-community-art" aria-hidden="true">
+            <span className="africa-community-node node-one"><GraduationCap size={19} /></span>
+            <span className="africa-community-node node-two"><BookOpenCheck size={19} /></span>
+            <span className="africa-community-node node-three"><Lightbulb size={19} /></span>
+            <span className="africa-community-center"><Users size={30} /></span>
+          </div>
+          <div className="africa-community-copy">
+            <span className="africa-kicker">COMMUNITY &amp; COLLABORATION</span>
+            <h2 id="community-heading">When we learn together, we rise together.</h2>
+            <p>
+              Grow through learning groups, teacher networks, and youth-led innovation.
+              Learners, educators, and creators can connect around shared interests, exchange
+              practical ideas, and collaborate on projects. Topic-based groups and discussions
+              are designed to make it easier to ask questions, share resources, and learn from
+              one another in a welcoming space.
+            </p>
+            <p>
+              Join a study conversation, discover educator networks, or share a resource with
+              people working toward similar goals. Community features are being developed with
+              safety, inclusion, and constructive participation in mind.
+            </p>
+            <Link className="africa-button africa-button-outline" href="/community">
+              Find your community <ArrowRight size={17} />
+            </Link>
+          </div>
+        </section>
+
+        <section className="africa-learning" id="partners" aria-labelledby="partners-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">INVESTORS &amp; PARTNERS</span>
+            <h2 id="partners-heading">Help build a more connected learning future.</h2>
+            <p>
+              EDU247 is developing an education ecosystem for learners, educators,
+              creators, and institutions. We welcome thoughtful conversations with people
+              and organizations who share that long-term ambition.
+            </p>
+          </div>
+          <div className="africa-impact-grid">
+            <DesignCard className="africa-impact-card">
+              <span className="africa-card-icon"><Sparkles size={22} /></span>
+              <h3>Investors</h3>
+              <p>
+                Learn about the platform vision, the needs it aims to address, and ways to
+                explore potential alignment. This is an invitation to start a conversation,
+                not an offer or promise of investment returns.
+              </p>
+              <a className="africa-inline-link" href="mailto:hello@edu247.com?subject=EDU247%20investor%20enquiry">
+                Discuss the vision <ArrowUpRight size={16} />
+              </a>
+            </DesignCard>
+            <DesignCard className="africa-impact-card">
+              <span className="africa-card-icon"><School size={22} /></span>
+              <h3>Institutional partners</h3>
+              <p>
+                Schools, colleges, and training organizations can explore connected
+                learning experiences and discuss their goals, needs, and onboarding plans.
+              </p>
+              <Link className="africa-inline-link" href="/institutions">
+                Explore partnerships <ArrowRight size={16} />
+              </Link>
+            </DesignCard>
+            <DesignCard className="africa-impact-card">
+              <span className="africa-card-icon"><Store size={22} /></span>
+              <h3>Creators and vendors</h3>
+              <p>
+                Educators and creators can prepare useful resources to share, while vendors
+                can learn about offering relevant products through the planned marketplace.
+              </p>
+              <Link className="africa-inline-link" href="/marketplace">
+                Explore creator opportunities <ArrowRight size={16} />
+              </Link>
+            </DesignCard>
+          </div>
+        </section>
+
+        <section className="africa-learning" id="what-we-offer" aria-labelledby="offers-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">WHAT WE OFFER</span>
+            <h2 id="offers-heading">One ecosystem. More ways to grow.</h2>
+            <p>
+              Bring learning, teaching, useful resources, and community together in
+              experiences designed for people and institutions.
+            </p>
+          </div>
+          <div className="africa-impact-grid">
+            {platformOffers.map(({ title, description, icon: Icon, href, action }) => (
+              <DesignCard className="africa-impact-card" key={title}>
+                <span className="africa-card-icon"><Icon size={22} /></span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <Link className="africa-inline-link" href={href}>
+                  {action} <ArrowRight size={16} />
+                </Link>
+              </DesignCard>
+            ))}
+          </div>
+        </section>
+
+        <section className="africa-measures" id="impact" aria-labelledby="measures-heading">
+          <div className="africa-section-heading">
+            <span className="africa-kicker">MEASURE WHAT MATTERS</span>
+            <h2 id="measures-heading">A future of opportunity, built together.</h2>
+            <p>These are the measures EDU247 is working toward and will report as the platform grows.</p>
+          </div>
+          <div className="africa-measure-grid">
+            {impactMeasures.map(({ label, icon: Icon }) => (
+              <DesignCard as="div" className="africa-measure-card" key={label}>
+                <Icon size={22} />
+                <strong>{label}</strong>
+                <span>Impact measure in development</span>
+              </DesignCard>
+            ))}
+          </div>
+        </section>
+
+        <section className="africa-newsletter" id="get-started" aria-labelledby="newsletter-title">
+          <div>
+            <span className="africa-kicker">GROW WITH US</span>
+            <h2 id="newsletter-title">A brighter future begins with learning.</h2>
+            <p>Follow the EDU247 journey and hear about new learning opportunities.</p>
+          </div>
+          <DesignCard className="africa-newsletter-panel">
+            <form className="africa-newsletter-form" onSubmit={handleNewsletterSubmit}>
+              <label htmlFor="newsletter-email">Get updates from EDU247</label>
+              <div>
+                <input id="newsletter-email" name="email" type="email" placeholder="Your email address" autoComplete="email" required />
+                <button className="africa-button africa-button-primary" type="submit">Subscribe <ArrowRight size={17} /></button>
+              </div>
             </form>
             {newsletterMessage ? (
-              <p className="newsletter-message" aria-live="polite" role="status">{newsletterMessage}</p>
+              <p className="africa-newsletter-message" aria-live="polite" role="status">{newsletterMessage}</p>
             ) : (
-              <span className="get-started-caption">Preview only: your email won&apos;t be sent or saved.</span>
+              <span className="africa-newsletter-note">Preview only: your email won&apos;t be sent or saved.</span>
             )}
-          </div>
+          </DesignCard>
         </section>
-
-        <footer className="site-footer">
-          <div className="footer-main">
-            <div className="footer-brand-col">
-              <Brand footer />
-              <p>Learning without limits.<br />Anytime. Anywhere.</p>
-              <a href="mailto:hello@edu247.com" className="footer-email">hello@edu247.com <ArrowUpRight size={14} /></a>
-              <SocialLinks variant="footer" />
-            </div>
-            <div className="footer-links">
-              <div><strong>Explore</strong><a href="#learning">Learn</a><a href="#teachers">Teach</a><a href="#ai-tools">AI tools</a><a href="#marketplace">Marketplace</a></div>
-              <div><strong>Build with us</strong><a href="#developers">Developers</a><a href="#community">Community</a><a href="#about">About EDU247</a><a href="#get-started">Get in touch</a></div>
-              <div><strong>Our promise</strong><a href="#about">Privacy by design</a><a href="#about">Responsible AI</a><a href="#about">Accessibility</a><a href="#about">Trust &amp; safety</a></div>
-            </div>
-            <a href="#top" className="back-to-top" aria-label="Back to top"><ChevronDown size={18} /></a>
-          </div>
-          <div className="footer-bottom">
-            <span>© 2026 EDU247. Learning without limits.</span>
-            <span>Made for a more curious world <span className="footer-heart">✳</span></span>
-            <a href="#top">Back to top ↑</a>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </main>
   );

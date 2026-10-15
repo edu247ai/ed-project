@@ -1,5 +1,7 @@
 import "./auth.css";
 
+import "./auth.css";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
