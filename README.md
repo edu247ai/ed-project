@@ -107,21 +107,211 @@ Python is reserved for dedicated AI services, including tutoring, lesson and med
 
 **Frontend previews are not production services.** Sign-in, registration, password recovery, and onboarding are not connected to an authentication backend. Newsletter validation happens in the browser only. Dashboards expect role-specific API endpoints; without a separately deployed API, they show an API-unavailable state. GitHub Pages hosts the static web app only, not backend APIs.
 
-## Repository map
+## Project structure
+
+The repository is intended to grow into the modular monorepo below. **This is the target structure, not a claim that every directory or service exists today.** The current implementation snapshot is listed separately afterward.
+
+### Target monorepo
+
+```text
+edu247/
+├── README.md
+├── LICENSE
+├── Makefile
+├── go.work
+├── .env.example
+├── .editorconfig
+├── .gitignore
+├── .github/
+│   ├── workflows/
+│   ├── ISSUE_TEMPLATE/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── CODEOWNERS
+├── apps/
+│   ├── web/                         # Next.js web experience
+│   ├── student-mobile/              # Planned student app
+│   ├── teacher-mobile/              # Planned teacher app
+│   ├── marketplace-mobile/          # Planned marketplace app
+│   └── admin-console/               # Planned administration UI
+├── gateway/                         # Go API gateway
+│   ├── cmd/api-gateway/
+│   ├── internal/
+│   │   ├── auth/
+│   │   ├── middleware/
+│   │   ├── routing/
+│   │   ├── ratelimit/
+│   │   └── observability/
+│   ├── config/
+│   ├── go.mod
+│   └── Dockerfile
+├── services/                        # Go platform services
+│   ├── identity-service/
+│   ├── user-service/
+│   ├── learning-service/
+│   ├── course-service/
+│   ├── assessment-service/
+│   ├── assignment-service/
+│   ├── progress-service/
+│   ├── notification-service/
+│   ├── content-service/
+│   ├── media-service/
+│   ├── search-service/
+│   ├── recommendation-orchestrator/
+│   ├── developer-service/
+│   ├── contribution-service/
+│   ├── hackathon-service/
+│   ├── marketplace-service/
+│   ├── catalog-service/
+│   ├── inventory-service/
+│   ├── order-service/
+│   ├── payment-service/
+│   ├── delivery-service/
+│   ├── vendor-service/
+│   ├── moderation-service/
+│   ├── analytics-service/
+│   ├── audit-service/
+│   ├── admin-service/
+│   └── integration-service/
+├── ai/                              # Python AI workloads only
+│   ├── ai-gateway/
+│   ├── tutor-service/
+│   ├── lesson-builder-service/
+│   ├── comic-creator-service/
+│   ├── infographic-creator-service/
+│   ├── mindmap-creator-service/
+│   ├── recommendation-service/
+│   ├── code-review-service/
+│   ├── security-auditor-service/
+│   ├── documentation-service/
+│   └── shared/
+├── packages/
+│   └── go/                          # Shared Go libraries
+│       ├── auth/
+│       ├── config/
+│       ├── database/
+│       ├── events/
+│       ├── httpx/
+│       ├── logging/
+│       ├── observability/
+│       ├── security/
+│       └── validation/
+├── contracts/
+│   ├── openapi/                     # Public REST APIs
+│   ├── protobuf/                   # Internal gRPC APIs
+│   ├── events/                     # Versioned event definitions
+│   └── schemas/                    # Shared data schemas
+├── database/
+│   ├── migrations/
+│   ├── seeds/
+│   ├── queries/
+│   └── README.md
+├── infrastructure/
+│   ├── docker/
+│   ├── kubernetes/
+│   ├── helm/
+│   ├── terraform/
+│   ├── monitoring/
+│   ├── logging/
+│   ├── secrets/
+│   └── environments/
+├── deployments/
+│   ├── local/
+│   ├── development/
+│   ├── staging/
+│   └── production/
+├── scripts/
+│   ├── bootstrap/
+│   ├── build/
+│   ├── database/
+│   ├── deploy/
+│   └── security/
+├── tests/
+│   ├── contract/
+│   ├── integration/
+│   ├── end-to-end/
+│   ├── performance/
+│   ├── security/
+│   └── fixtures/
+└── docs/
+    ├── architecture/
+    ├── api/
+    ├── ai/
+    ├── security/
+    ├── operations/
+    ├── product/
+    ├── decisions/
+    └── onboarding/
+```
+
+### Standard service layouts
+
+Each Go service should be independently buildable and own its domain, persistence, transport, and operational configuration:
+
+```text
+service-name/
+├── cmd/service-name/main.go
+├── internal/
+│   ├── domain/
+│   ├── application/
+│   ├── repository/
+│   ├── transport/http/
+│   ├── transport/grpc/
+│   ├── messaging/
+│   ├── config/
+│   └── observability/
+├── migrations/
+├── tests/
+├── config/
+├── go.mod
+├── go.sum
+├── Dockerfile
+└── README.md
+```
+
+Each Python AI service should keep its API, model/provider integrations, generation pipeline, safety, evaluation, and observability concerns within the AI boundary:
+
+```text
+ai-service-name/
+├── app/
+│   ├── main.py
+│   ├── api/
+│   ├── domain/
+│   ├── pipelines/
+│   ├── models/
+│   ├── prompts/
+│   ├── providers/
+│   ├── safety/
+│   ├── evaluation/
+│   ├── storage/
+│   └── observability/
+├── tests/
+├── model-config/
+├── datasets/
+├── pyproject.toml
+├── requirements.lock
+├── Dockerfile
+└── README.md
+```
+
+### Current repository snapshot
+
+Only the web application and an early gateway scaffold are currently present as application code. The other top-level areas in the target tree are planned:
 
 ```text
 .
 ├── apps/
-│   └── web/                 # Next.js public site and platform UI
-├── gateway/                 # Go API gateway scaffold
+│   └── web/                         # Implemented Next.js app
+├── gateway/                         # Early Go scaffold
 ├── .github/
-│   └── workflows/           # Web lint, build, and Pages deployment
-├── .env.example             # Environment-variable template
+│   ├── CODEOWNERS
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/deploy-web.yml
+├── .env.example
+├── .editorconfig
 ├── LICENSE
+├── Makefile
 └── README.md
 ```
-
-As the platform grows, the intended monorepo will also add Go services and shared packages, Python AI services, API and event contracts, database migrations, infrastructure, deployment configurations, and broader test suites.
 
 ## Engineering principles
 
