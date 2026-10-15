@@ -15,9 +15,9 @@ The six delivery phases and week ranges are an initial planning model, not a com
 
 ## Account and onboarding preview
 
-The frontend preview includes `/auth/login`, `/auth/register`, `/auth/forgot-password`, and `/auth/onboarding`. These screens are not connected to an authentication service: sign-in, account creation, and password recovery do not contact a server. Registration and onboarding keep only a temporary draft in the current browser tab's session storage; passwords are never stored.
+The frontend preview includes `/auth/login`, `/auth/register`, `/auth/forgot-password`, and `/auth/onboarding`. These screens are not connected to an authentication service: email sign-in, LinkedIn/GitHub/Facebook/X authentication, account creation, and password recovery do not contact a server. Registration and onboarding keep only a temporary draft in the current browser tab's session storage; passwords are never stored.
 
-The homepage newsletter form is also a frontend preview until a subscription service is connected. It validates the email address in the browser but does not send or save it.
+The homepage newsletter section invites visitors to subscribe to OpenStack project, community, event, and cloud-learning news. It is a frontend preview until a subscription service is connected: it validates the email address in the browser but does not send or save it.
 
 ## Build
 

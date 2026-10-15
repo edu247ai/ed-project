@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import { AuthShell } from "../components/AuthShell";
 import { PasswordField } from "../components/PasswordField";
+import { SocialAuthOptions } from "../components/SocialAuthOptions";
 
 export default function LoginPage() {
   const [message, setMessage] = useState("");
@@ -23,6 +24,7 @@ export default function LoginPage() {
       <div className="auth-notice" role="status">
         Account sign-in is not connected yet. This form is a preview and will not send your credentials.
       </div>
+      <SocialAuthOptions action="sign in" />
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="auth-field">
           <label htmlFor="login-email">Email address</label>

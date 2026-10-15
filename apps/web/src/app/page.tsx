@@ -12,6 +12,7 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  Cloud,
   Code2,
   GraduationCap,
   Lightbulb,
@@ -706,29 +707,33 @@ export default function HomePage() {
           <div><span className="stat-icon stat-lilac"><Store size={21} /></span><span><strong>Good things to discover</strong><small>Learning resources</small></span></div>
         </section>
 
-        <section className="get-started" id="get-started">
-          <div className="get-started-spark spark-left"><Sparkles size={26} /></div>
-          <div className="get-started-spark spark-right"><Sparkles size={19} /></div>
-          <span className="section-kicker">STAY CURIOUS WITH EDU247</span>
-          <h2>Let&apos;s make learning<br /><em>go further.</em></h2>
-          <p>Get learning ideas, new resources and EDU247 updates delivered to your inbox.</p>
-          <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-            <label className="newsletter-email-label" htmlFor="newsletter-email">Email address</label>
-            <input
-              autoComplete="email"
-              id="newsletter-email"
-              name="email"
-              placeholder="Enter your email address"
-              type="email"
-              required
-            />
-            <button className="button button-dark" type="submit">Subscribe <ArrowRight size={16} /></button>
-          </form>
-          {newsletterMessage ? (
-            <p className="newsletter-message" aria-live="polite" role="status">{newsletterMessage}</p>
-          ) : (
-            <span className="get-started-caption">Newsletter signup preview: your email won&apos;t be sent or saved.</span>
-          )}
+        <section className="get-started newsletter-section" id="get-started" aria-labelledby="newsletter-title">
+          <div className="newsletter-copy">
+            <span className="newsletter-kicker"><Cloud size={15} /> EDU247 COMMUNITY</span>
+            <h2 id="newsletter-title">Subscribe to news<br />about <em>EDU247.</em></h2>
+            <p>Get EDU247 updates, community news, events and practical learning highlights from EDU247.</p>
+          </div>
+          <div className="newsletter-panel">
+            <span className="newsletter-panel-title">Stay up to date</span>
+            <p>One useful update at a time. Sign up with your email address.</p>
+            <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+              <label className="newsletter-email-label" htmlFor="newsletter-email">Email address</label>
+              <input
+                autoComplete="email"
+                id="newsletter-email"
+                name="email"
+                placeholder="Your email address"
+                type="email"
+                required
+              />
+              <button className="button button-dark" type="submit">Subscribe <ArrowRight size={16} /></button>
+            </form>
+            {newsletterMessage ? (
+              <p className="newsletter-message" aria-live="polite" role="status">{newsletterMessage}</p>
+            ) : (
+              <span className="get-started-caption">Preview only: your email won&apos;t be sent or saved.</span>
+            )}
+          </div>
         </section>
 
         <footer className="site-footer">

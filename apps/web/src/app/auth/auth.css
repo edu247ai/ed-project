@@ -481,6 +481,71 @@
   line-height: 1.6;
 }
 
+.social-auth {
+  margin: -2px 0 18px;
+}
+
+.social-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #87949d;
+  font-size: 8px;
+}
+
+.social-auth-divider::before,
+.social-auth-divider::after {
+  height: 1px;
+  flex: 1;
+  background: #e5eaee;
+  content: "";
+}
+
+.social-auth-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.social-auth-button {
+  min-width: 0;
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #dce3e8;
+  border-radius: 5px;
+  padding: 0;
+  color: #344a5b;
+  background: white;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+
+.social-auth-button:hover {
+  border-color: #a9c5d9;
+  color: #145d91;
+  background: #f6fafc;
+}
+
+.social-auth-button svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.social-auth-message {
+  margin: 10px 0 0;
+  border: 1px solid #edcfb9;
+  border-radius: 5px;
+  padding: 9px 10px;
+  color: #88522c;
+  background: #fff8f1;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;

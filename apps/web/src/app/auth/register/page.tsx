@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import { AuthShell } from "../components/AuthShell";
 import { PasswordField } from "../components/PasswordField";
+import { SocialAuthOptions } from "../components/SocialAuthOptions";
 
 type ProfileDraft = {
   name: string;
@@ -41,6 +42,7 @@ export default function RegisterPage() {
       <div className="auth-notice" role="status">
         Account creation is not connected yet. You can preview the registration and onboarding flow; no account will be created. Your name and email are kept only in this browser session. Your password is never saved.
       </div>
+      <SocialAuthOptions action="create an account" />
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="auth-field">
           <label htmlFor="register-name">Your name</label>
