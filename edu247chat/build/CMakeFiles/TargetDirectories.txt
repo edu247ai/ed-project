@@ -1,3 +1,0 @@
-/home/orcadevstack/edu247/edu247chat/build/CMakeFiles/edu247chat.dir
-/home/orcadevstack/edu247/edu247chat/build/CMakeFiles/edit_cache.dir
-/home/orcadevstack/edu247/edu247chat/build/CMakeFiles/rebuild_cache.dir
