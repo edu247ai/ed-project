@@ -339,6 +339,28 @@ Contributions are welcome as the project takes shape. Before opening a pull requ
 
 Please use the repository's [pull request template](.github/PULL_REQUEST_TEMPLATE.md) when proposing a change.
 
+## Community
+
+Questions, ideas, or want to meet other contributors? Join us:
+
+<p>
+  <a href="https://discord.gg/98HJ7bMfY"><img alt="Discord — Developers & AI community" src="https://img.shields.io/badge/Discord-Developers%20%26%20AI%20community-5865F2?logo=discord&logoColor=white"></a>
+  <a href="https://edu247.slack.com/archives/C0C9GBJCVPT"><img alt="Slack — Team & contributors" src="https://img.shields.io/badge/Slack-Team%20%26%20contributors-4A154B?logo=slack&logoColor=white"></a>
+  <a href="https://github.com/edu247ai"><img alt="GitHub — Explore EDU247 projects" src="https://img.shields.io/badge/GitHub-Explore%20EDU247%20projects-181717?logo=github&logoColor=white"></a>
+</p>
+
+### Follow & Contact
+
+<p>
+  <img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+  <img alt="Facebook" src="https://img.shields.io/badge/Facebook-0866FF?logo=facebook&logoColor=white">
+  <img alt="X" src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white">
+  <img alt="TikTok" src="https://img.shields.io/badge/TikTok-000000?logo=tiktok&logoColor=white">
+  <a href="mailto:developer@edu247.co.za"><img alt="Email: developer@edu247.co.za" src="https://img.shields.io/badge/Email-developer%40edu247.co.za-EA4335?logo=gmail&logoColor=white"></a>
+</p>
+
+Social profile links will be added when the official EDU247 accounts are available.
+
 ## License
 
 See [LICENSE](LICENSE).
