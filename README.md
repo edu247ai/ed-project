@@ -60,7 +60,7 @@ npm run lint
 npm run build
 ```
 
-The current Go gateway directory is an early scaffold. Platform APIs and Python AI services are not yet available as locally runnable services in this repository.
+The current Go gateway directory is an early scaffold. Python AI service starter scaffolds under `edumodel/services/` can run a health check, but their model behavior and production APIs are not implemented.
 
 ## Platform architecture
 
@@ -101,7 +101,7 @@ Python is reserved for dedicated AI services, including tutoring, lesson and med
 | EDU247 web experience | Implemented as a Next.js, React, and TypeScript app in `apps/web` |
 | API gateway | Early Go scaffold in `gateway` |
 | Platform microservices | Planned; not yet implemented |
-| Python AI services | Planned; not yet implemented |
+| Python AI services | Starter scaffolds under `edumodel/services/`; model behavior is not yet implemented |
 | Service contracts and event schemas | Part of the target architecture; not yet established throughout the repository |
 | GitHub Pages | Web app build and deployment workflow is configured |
 
@@ -184,6 +184,7 @@ edu247/
 │   ├── security-auditor-service/
 │   ├── documentation-service/
 │   └── shared/
+├── orchestrationmodel/              # AI orchestration platform scaffold
 ├── packages/
 │   └── go/                          # Shared Go libraries
 │       ├── auth/
@@ -268,30 +269,22 @@ service-name/
 └── README.md
 ```
 
-Each Python AI service should keep its API, model/provider integrations, generation pipeline, safety, evaluation, and observability concerns within the AI boundary:
+Each Python AI service should keep responsibilities in predictable, top-level folders. The current AI service directories under `edumodel/services/` are starter scaffolds; add service-specific behavior without moving them to the repository root:
 
 ```text
 ai-service-name/
-├── app/
-│   ├── main.py
-│   ├── api/
-│   ├── domain/
-│   ├── pipelines/
-│   ├── models/
-│   ├── prompts/
-│   ├── providers/
-│   ├── safety/
-│   ├── evaluation/
-│   ├── storage/
-│   └── observability/
-├── tests/
-├── model-config/
-├── datasets/
-├── pyproject.toml
-├── requirements.lock
-├── Dockerfile
+├── api/          # REST/GraphQL/FastAPI endpoints
+├── model/        # Python model and domain definitions
+├── pipeline/     # Preprocessing, inference, and postprocessing
+├── adapters/     # Databases, storage, and external integrations
+├── config/       # Environment-based settings and constants
+├── tests/        # Unit and integration tests
+├── scripts/      # Training, evaluation, and utility scripts
+├── artifacts/    # Generated model checkpoints and evaluation outputs
 └── README.md
 ```
+
+Keep generated or large model artifacts out of source control unless a service explicitly needs to version them. Each service README should explain its purpose and the commands for setup, running, testing, training, and deployment; mark workflows that are not implemented yet as such.
 
 ### Current repository snapshot
 
