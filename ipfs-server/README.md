@@ -6,10 +6,34 @@ consistent way for services to store, retrieve, and verify files such as
 datasets, model checkpoints, curriculum content, student submissions, and
 generated learning materials.
 
-> **Implementation status:** This repository currently contains the service
-> directory scaffold only. The API, IPFS node integration, storage backends,
-> security controls, monitoring, and tests described below are planned; they
-> are not implemented or available to run yet.
+> **Implementation status:** The service now has a buildable Go module and a
+> tested local upload/retrieval core. It is **not yet a Kubo-compatible or
+> production-ready IPFS daemon**. In particular, libp2p, DHT, Bitswap, remote
+> replication, streaming/chunked uploads, production authentication, and
+> pipeline encryption/signing are not implemented.
+
+## Implemented local core
+
+- CIDv1 strings using the raw codec and SHA-256 multihashes, encoded as
+  lowercase base32.
+- A filesystem-backed local store that checks CID/content correspondence on
+  writes and verifies content again on reads.
+- Atomic block-file writes and separate pinned/unpinned directories. The
+  storage API rejects explicit deletion of pinned blocks; the standalone GC
+  scaffold is not yet wired to the blockstore API.
+- A pipeline upload/download path and basic HTTP `/upload` and `/download`
+  routes.
+
+The current API middleware contains a fixed development API key. Do not expose
+the HTTP API to an untrusted network or use it for production data. Other
+security and distributed-system components in the directory tree are
+scaffolding and must not be treated as active protections or functionality.
+
+Run the module checks from the repository root:
+
+```sh
+go -C ipfs-server test ./...
+```
 
 ## Purpose
 
@@ -49,38 +73,37 @@ ipfs-server/
 └── README.md
 ```
 
-## Planned capabilities
+## Capability status
 
 | Capability | Intended behavior |
 | --- | --- |
-| Content addressing | Identify content by CID and verify retrieved bytes |
-| Pinning | Keep explicitly selected content available on configured nodes |
-| Retrieval | Fetch content from a local node or configured IPFS peers/gateways |
-| Replication | Configure copies across approved nodes or an IPFS Cluster |
-| Storage adapters | Integrate with approved databases, S3-compatible storage, and Redis |
-| File pipeline | Validate and process uploads before indexing or distribution |
-| Observability | Report node health, peer count, storage use, replication, and latency |
+| Content addressing | Local CIDv1/raw/SHA-256 generation and content verification are implemented |
+| Pinning | Local pin/unpin operations are implemented; cluster pinning is not |
+| Retrieval | Local block retrieval is implemented; peer/gateway retrieval is not |
+| Replication | Not implemented |
+| Storage adapters | Adapter scaffolds exist; they are not wired as blockstore backends |
+| File pipeline | Byte-slice upload/retrieval is implemented; streaming/chunking is not |
+| Observability | Basic in-process counters/dashboard scaffolding exists; Prometheus and swarm metrics are not implemented |
 
 Availability depends on pinning and network configuration. IPFS is not a
 backup policy by itself: services remain responsible for retention,
 replication requirements, and recovery procedures.
 
-## Planned API
+## Current API
 
-The following routes are a proposed API contract; they are not implemented in
-this scaffold:
+The current routes are a minimal development interface, not a versioned or
+hardened API contract:
 
 | Method | Route | Purpose |
 | --- | --- | --- |
-| `POST` | `/api/upload` | Upload content and return its CID and metadata |
-| `GET` | `/api/file/{cid}` | Retrieve content by CID |
-| `POST` | `/api/pin/{cid}` | Request that content be pinned |
-| `DELETE` | `/api/pin/{cid}` | Request that content be unpinned |
-| `GET` | `/api/cid/{cid}` | Validate or resolve a CID and its metadata |
+| `POST` | `/upload` | Accept a JSON object with a base64-encoded `data` field and return its CID |
+| `GET` | `/download?cid={cid}` | Return the CID, byte size, and base64-encoded data |
+| `POST` | `/replicate?cid={cid}` | Development replication handler; validation and auth are incomplete |
+| `GET` | `/dashboard` | In-process JSON counters when monitoring is initialized |
 
-Before implementation, define request/response schemas, size limits,
-authentication and authorization behavior, error responses, and API versioning
-in `docs/api-reference/`.
+`/upload` and `/download` currently use the hard-coded development API key
+documented above. Do not rely on these routes for authorization, resource
+limits, or production deployments.
 
 ## File flow
 
@@ -112,9 +135,9 @@ Planned controls include:
 - Audit events for access and administrative operations
 - Secret values supplied through an approved secret manager or environment
 
-These controls are **not present yet**. AES-256, JWT access control, role
-policies, and audit logging must not be treated as implemented guarantees until
-they are delivered and tested.
+These controls are **not fully wired or production-ready**. AES-GCM, HMAC,
+role-policy, and audit packages are not yet enforced by API/pipeline flows and
+must not be treated as implemented guarantees.
 
 ## Integration with EDU247 services
 
@@ -153,8 +176,9 @@ The planned test suite includes:
 - Performance tests for upload, retrieval, and replication behavior
 - Failure tests for unavailable peers, storage limits, and invalid content
 
-No service tests or executable service code are present in the current
-scaffold.
+The local CID, pipeline/storage, and HTTP upload/download flows have tests.
+Swarm, replication, production security, and performance-under-load behavior
+remain unverified and are not covered by the current test suite.
 
 ## Documentation
 
@@ -170,12 +194,12 @@ docs/
 
 ## Development roadmap
 
-1. Define and version the API schemas and access-control model.
-2. Implement a minimal local-node upload, CID verification, and retrieval flow.
-3. Add pinning, storage adapters, and integration tests.
-4. Add encryption/key-management integration, audit events, and monitoring.
-5. Validate replication, recovery, performance, and deployment procedures.
+1. Replace the development API key with configured role-based access control.
+2. Add streaming/chunked ingestion and explicit size/resource limits.
+3. Wire encryption, integrity signatures, audit events, and metrics through API and pipeline flows.
+4. Add libp2p transport, peer discovery, DHT, and block exchange.
+5. Wire backend adapters and validate cluster replication, recovery, and deployment procedures.
 
-The IPFS Server is a planned shared storage capability. Do not treat it as a
-required production dependency until its implementation, security controls, and
-operational guarantees have been reviewed and deployed.
+Do not treat the IPFS Server as a production storage dependency until its
+security controls, distributed behavior, and operational guarantees have been
+implemented, reviewed, and deployed.

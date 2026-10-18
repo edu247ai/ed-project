@@ -1,0 +1,15 @@
+api:
+  port: 8082
+
+dashboard:
+  port: 8083
+
+swarm:
+  port: 4002
+
+storage:
+  base: "/var/ipfs/dev"
+
+security:
+  encryption_key: "dev-32-byte-key-xxxxxxxxxxxxxxxxxxxxxxx"
+  signature_key:  "dev-32-byte-key-xxxxxxxxxxxxxxxxxxxxxxx"

@@ -1,0 +1,15 @@
+api:
+  port: 8082
+
+dashboard:
+  port: 8083
+
+swarm:
+  port: 4002
+
+storage:
+  base: "/var/ipfs/prod"
+
+security:
+  encryption_key: "prod-32-byte-key-xxxxxxxxxxxxxxxxxxxxxxx"
+  signature_key:  "prod-32-byte-key-xxxxxxxxxxxxxxxxxxxxxxx"
